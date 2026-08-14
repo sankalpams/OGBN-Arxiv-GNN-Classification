@@ -1,6 +1,4 @@
-# CCS4354 - Tensors and Graphs
-
-Node classification on the OGBN-Arxiv citation graph using GCN and GAT models.
+# Node classification on the OGBN-Arxiv citation graph using GCN and GAT models.
 
 ## Quick start (local)
 
