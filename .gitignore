@@ -13,3 +13,11 @@ results/**/*.txt
 !data/processed/.gitkeep
 !models/.gitkeep
 !results/**/.gitkeep
+
+# Exclude Reports & Coursework Deliverables
+report/
+presentation/
+video/
+Project_Proposal.md
+build_*_pdf.py
+tmp_*.py
