@@ -8,7 +8,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 An end-to-end Deep Graph Representation Learning project performing large-scale **node property prediction (subject classification)** on the **OGBN-Arxiv citation graph** (169,343 nodes, 2,315,598 edges, 40 categories). Features PyTorch Geometric implementations of **Graph Convolutional Networks (GCN)** and **Graph Attention Networks (GAT)**, inductive temporal evaluation, latent embedding explainability (PCA & t-SNE), a full **Streamlit interactive dashboard**, and a publication-grade **Technical Report**.
-
 ---
 
 ## 📌 Project Highlights
