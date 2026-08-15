@@ -24,7 +24,7 @@ An end-to-end Deep Graph Representation Learning project performing large-scale 
 
 ## 🏛️ System Architecture
 
-```mermaid
+```
 flowchart TD
     A[Raw OGBN-Arxiv Dataset\n169,343 Nodes | 2,315,598 Edges] --> B[Data Preparation & Preprocessing\nGraph Symmetrization Ã = A + Aᵀ + I]
     B --> C[Temporal Partitioning\nTrain: ≤2017 | Valid: 2018 | Test: 2019-2020]
