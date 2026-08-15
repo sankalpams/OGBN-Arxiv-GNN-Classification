@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
+.env
+data/raw/ogbn_arxiv/
+data/processed/*.pt
+models/*.pt
+results/**/*.png
+results/**/*.csv
+results/**/*.txt
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!models/.gitkeep
+!results/**/.gitkeep
