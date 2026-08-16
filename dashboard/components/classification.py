@@ -1,7 +1,5 @@
 from pathlib import Path
-import numpy as np
 import pandas as pd
-import plotly.express as px
 import streamlit as st
 
 
@@ -27,12 +25,11 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
 
     df = pd.read_csv(predictions_file)
     total_samples = len(df)
-    gcn_correct_cnt = df["gcn_correct"].sum()
-    gat_correct_cnt = df["gat_correct"].sum()
-    agreement_cnt = (df["gcn_pred"] == df["gat_pred"]).sum()
-    both_correct_cnt = (df["gcn_correct"] & df["gat_correct"]).sum()
+    gcn_correct_cnt = int(df["gcn_correct"].sum())
+    gat_correct_cnt = int(df["gat_correct"].sum())
+    agreement_cnt = int((df["gcn_pred"] == df["gat_pred"]).sum())
 
-    # Metrics Summary
+    # Metrics Summary Cards
     m1, m2, m3, m4 = st.columns(4)
     with m1:
         st.markdown(f"""
@@ -164,6 +161,15 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
             selected_node = st.selectbox("Select Paper Node ID to inspect in detail:", node_options, index=default_index)
             row = filtered_df[filtered_df["node_id"] == selected_node].iloc[0]
 
+            true_cat = str(row['true_label'])
+            gcn_pred_cat = str(row['gcn_pred'])
+            gat_pred_cat = str(row['gat_pred'])
+            gcn_is_corr = bool(row['gcn_correct'])
+            gat_is_corr = bool(row['gat_correct'])
+
+            gcn_detail_msg = "✔ Successfully predicted ground truth" if gcn_is_corr else f"✘ Expected {true_cat}"
+            gat_detail_msg = "✔ Successfully predicted ground truth" if gat_is_corr else f"✘ Expected {true_cat}"
+
             col_p1, col_p2, col_p3 = st.columns([1.2, 1.4, 1.4])
             
             with col_p1:
@@ -174,47 +180,47 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
                     <div style="color: #38BDF8; font-size: 0.9rem; margin-top: 4px;">MAG ID: <code>{row['paper_id']}</code></div>
                     <div style="margin-top: 12px; padding: 8px 12px; background: rgba(56, 189, 248, 0.1); border-radius: 8px;">
                         <div style="color: #94A3B8; font-size: 0.75rem;">GROUND TRUTH CATEGORY</div>
-                        <div style="color: #38BDF8; font-weight: 700; font-size: 1.05rem;">{row['true_label']}</div>
+                        <div style="color: #38BDF8; font-weight: 700; font-size: 1.05rem;">{true_cat}</div>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
 
             with col_p2:
-                gcn_status_badge = "background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #10B981;" if row['gcn_correct'] else "background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid #EF4444;"
+                gcn_status_badge = "background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #10B981;" if gcn_is_corr else "background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid #EF4444;"
                 st.markdown(f"""
                 <div style="background: rgba(30, 41, 59, 0.7); padding: 18px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.3);">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: #38BDF8; font-weight: 700; font-size: 1.05rem;">🔹 GCN Output</span>
                         <span style="padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; {gcn_status_badge}">
-                            {'MATCH' if row['gcn_correct'] else 'MISMATCH'}
+                            {'MATCH' if gcn_is_corr else 'MISMATCH'}
                         </span>
                     </div>
                     <div style="margin-top: 12px;">
                         <div style="color: #94A3B8; font-size: 0.8rem;">Predicted Subject:</div>
-                        <div style="font-size: 1.15rem; font-weight: 700; color: #F8FAFC;">{row['gcn_pred']}</div>
+                        <div style="font-size: 1.15rem; font-weight: 700; color: #F8FAFC;">{gcn_pred_cat}</div>
                     </div>
-                    <div style="margin-top: 10px; font-size: 0.85rem; color: {'#10B981' if row['gcn_correct'] else '#EF4444'};">
-                        {'✔ Successfully predicted ground truth' if row['gcn_correct'] else f'✘ Expected {row[\"true_label\"]}'}
+                    <div style="margin-top: 10px; font-size: 0.85rem; color: {'#10B981' if gcn_is_corr else '#EF4444'};">
+                        {gcn_detail_msg}
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
 
             with col_p3:
-                gat_status_badge = "background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #10B981;" if row['gat_correct'] else "background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid #EF4444;"
+                gat_status_badge = "background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #10B981;" if gat_is_corr else "background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid #EF4444;"
                 st.markdown(f"""
                 <div style="background: rgba(30, 41, 59, 0.7); padding: 18px; border-radius: 12px; border: 1px solid rgba(192, 132, 252, 0.3);">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: #C084FC; font-weight: 700; font-size: 1.05rem;">🔸 GAT Output</span>
                         <span style="padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; {gat_status_badge}">
-                            {'MATCH' if row['gat_correct'] else 'MISMATCH'}
+                            {'MATCH' if gat_is_corr else 'MISMATCH'}
                         </span>
                     </div>
                     <div style="margin-top: 12px;">
                         <div style="color: #94A3B8; font-size: 0.8rem;">Predicted Subject:</div>
-                        <div style="font-size: 1.15rem; font-weight: 700; color: #F8FAFC;">{row['gat_pred']}</div>
+                        <div style="font-size: 1.15rem; font-weight: 700; color: #F8FAFC;">{gat_pred_cat}</div>
                     </div>
-                    <div style="margin-top: 10px; font-size: 0.85rem; color: {'#10B981' if row['gat_correct'] else '#EF4444'};">
-                        {'✔ Successfully predicted ground truth' if row['gat_correct'] else f'✘ Expected {row[\"true_label\"]}'}
+                    <div style="margin-top: 10px; font-size: 0.85rem; color: {'#10B981' if gat_is_corr else '#EF4444'};">
+                        {gat_detail_msg}
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
