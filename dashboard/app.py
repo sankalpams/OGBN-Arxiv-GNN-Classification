@@ -372,8 +372,7 @@ with tab_train:
                 margin=dict(l=20, r=20, t=30, b=20),
                 height=320
             )
-            st.plotly_chart(fig_loss, use_container_width=True)
-
+            st.plotly_chart(fig_loss, width="stretch")
         with col_c2:
             st.markdown("#### 🎯 Validation Accuracy (%)")
             fig_acc = go.Figure()
@@ -399,7 +398,7 @@ with tab_train:
                 margin=dict(l=20, r=20, t=30, b=20),
                 height=320
             )
-            st.plotly_chart(fig_acc, use_container_width=True)
+            st.plotly_chart(fig_acc, width="stretch")
 
     else:
         st.info("Training history logs will appear once notebooks 04 & 05 are executed.")

@@ -73,7 +73,7 @@ def render_embedding_image(explain_dir: Path | None = None) -> None:
         </div>
         """, unsafe_allow_html=True)
         if tsne_plot.exists():
-            st.image(str(tsne_plot), caption="t-SNE 2D Manifold Embedding Clustered by Research Topic", use_container_width=True)
+            st.image(str(tsne_plot), caption="t-SNE 2D Manifold Embedding Clustered by Research Topic", width="stretch")
         else:
             st.info("Run Notebook 08 to generate t-SNE embedding visualization.")
 
@@ -87,7 +87,7 @@ def render_embedding_image(explain_dir: Path | None = None) -> None:
         </div>
         """, unsafe_allow_html=True)
         if pca_plot.exists():
-            st.image(str(pca_plot), caption="PCA 2D Linear Projection of Learned Node Embeddings (Colored by Subject Area)", use_container_width=True)
+            st.image(str(pca_plot), caption="PCA 2D Linear Projection of Learned Node Embeddings (Colored by Subject Area)", width="stretch")
         else:
             st.info("Run Notebook 08 to generate PCA embedding visualization.")
 
@@ -95,7 +95,7 @@ def render_embedding_image(explain_dir: Path | None = None) -> None:
         c1, c2 = st.columns(2)
         with c1:
             if pca_plot.exists():
-                st.image(str(pca_plot), caption="PCA (Linear Global Geometry)", use_container_width=True)
+                st.image(str(pca_plot), caption="PCA (Linear Global Geometry)", width="stretch")
         with c2:
             if tsne_plot.exists():
-                st.image(str(tsne_plot), caption="t-SNE (Non-Linear Local Manifolds)", use_container_width=True)
+                st.image(str(tsne_plot), caption="t-SNE (Non-Linear Local Manifolds)", width="stretch")

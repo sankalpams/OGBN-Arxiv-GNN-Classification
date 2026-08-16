@@ -98,7 +98,7 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#E2E8F0")
         )
-        st.plotly_chart(fig_donut, use_container_width=True)
+        st.plotly_chart(fig_donut, width="stretch")
 
     with col_right:
         st.markdown("#### 📐 Topological Metrics Summary")
@@ -110,7 +110,7 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
             elif formatted_df[col].dtype == int or "int" in str(formatted_df[col].dtype):
                 formatted_df[col] = formatted_df[col].apply(lambda x: f"{x:,}")
         
-        st.dataframe(formatted_df, use_container_width=True, hide_index=True)
+        st.dataframe(formatted_df, width="stretch", hide_index=True)
         
         st.markdown("""
         <div style="background: rgba(30, 41, 59, 0.6); padding: 14px 18px; border-radius: 10px; border-left: 4px solid #38BDF8; margin-top: 10px;">
@@ -133,11 +133,11 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
     with col_img1:
         if deg_plot.exists():
             st.markdown("<div class='glass-img-container'>", unsafe_allow_html=True)
-            st.image(str(deg_plot), caption="📊 Power-Law Degree Distribution (Log Scale)", use_container_width=True)
+            st.image(str(deg_plot), caption="📊 Power-Law Degree Distribution (Log Scale)", width="stretch")
             st.markdown("</div>", unsafe_allow_html=True)
             
     with col_img2:
         if subgraph_plot.exists():
             st.markdown("<div class='glass-img-container'>", unsafe_allow_html=True)
-            st.image(str(subgraph_plot), caption="🕸️ Local 2-Hop Ego Citation Subgraph Structure", use_container_width=True)
+            st.image(str(subgraph_plot), caption="🕸️ Local 2-Hop Ego Citation Subgraph Structure", width="stretch")
             st.markdown("</div>", unsafe_allow_html=True)

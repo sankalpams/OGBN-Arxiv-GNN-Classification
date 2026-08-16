@@ -104,7 +104,7 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
             margin=dict(l=20, r=20, t=30, b=20),
             height=320
         )
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, width="stretch")
 
     with col_radar:
         st.markdown("#### 🕸️ Multidimensional Performance Radar")
@@ -140,13 +140,13 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
             margin=dict(l=30, r=30, t=30, b=20),
             height=320
         )
-        st.plotly_chart(fig_radar, use_container_width=True)
+        st.plotly_chart(fig_radar, width="stretch")
 
     st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
 
     # Detailed Table
     st.markdown("#### 📋 Raw Metric Values")
-    st.dataframe(metrics_df, use_container_width=True, hide_index=True)
+    st.dataframe(metrics_df, width="stretch", hide_index=True)
 
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
 
@@ -160,10 +160,10 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
 
     with tab_cm_gcn:
         if cm_gcn.exists():
-            st.image(str(cm_gcn), caption="GCN Confusion Matrix across 40 arXiv Subject Categories", use_container_width=True)
+            st.image(str(cm_gcn), caption="GCN Confusion Matrix across 40 arXiv Subject Categories", width="stretch")
     with tab_cm_gat:
         if cm_gat.exists():
-            st.image(str(cm_gat), caption="GAT Confusion Matrix across 40 arXiv Subject Categories", use_container_width=True)
+            st.image(str(cm_gat), caption="GAT Confusion Matrix across 40 arXiv Subject Categories", width="stretch")
     with tab_cm_comp:
         if comp_plot.exists():
-            st.image(str(comp_plot), caption="Full Comparative Bar Plot across All Metrics", use_container_width=True)
+            st.image(str(comp_plot), caption="Full Comparative Bar Plot across All Metrics", width="stretch")

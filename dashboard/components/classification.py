@@ -124,7 +124,7 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
     with c_count:
         st.markdown(f"<span style='color: #94A3B8; font-size: 0.9rem;'>Displaying <b style='color: #38BDF8;'>{len(filtered_df):,}</b> matching publications</span>", unsafe_allow_html=True)
     with c_rand:
-        if st.button("🎲 Pick Random Paper", use_container_width=True):
+        if st.button("🎲 Pick Random Paper", width="stretch"):
             if len(filtered_df) > 0:
                 random_pick = int(filtered_df.sample(1)["node_id"].iloc[0])
                 st.session_state["selected_inspect_node"] = random_pick
@@ -144,7 +144,7 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
             "gcn_pred": "GCN Prediction",
             "gat_pred": "GAT Prediction"
         }),
-        use_container_width=True,
+        width="stretch",
         hide_index=True
     )
 
