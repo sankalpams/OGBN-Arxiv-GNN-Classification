@@ -88,7 +88,14 @@ pip install -r requirements.txt
 Execute the sequentially numbered notebooks in `notebooks/` to reproduce all data preprocessing, model training, evaluation, and explainability plots:
 
 ```bash
-python -m jupyter notebook
+# Option 1: Using the convenient one-click launcher (Recommended for Windows)
+python run_notebooks.py
+# or double-click run_notebooks.bat
+
+# Option 2: Direct Jupyter commands
+python -m notebook
+# or
+python -m jupyterlab
 ```
 
 | # | Notebook | Focus Area | Outputs & Generated Artifacts |
