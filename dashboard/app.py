@@ -41,8 +41,29 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
 
+    html {
+        scroll-behavior: smooth;
+    }
+
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
+    }
+
+    /* Modern Custom 3D Glowing Scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #0B0F19;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #38BDF8 0%, #C084FC 100%);
+        border-radius: 8px;
+        border: 2px solid #0B0F19;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #0284C7 0%, #9333EA 100%);
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -55,11 +76,12 @@ st.markdown("""
         padding-top: 1.8rem;
         padding-bottom: 2.5rem;
         max-width: 1400px;
+        perspective: 1200px;
     }
 
-    /* Glassmorphism Metric Cards */
+    /* Glassmorphism 3D Metric Cards with Depth & Hover Tilt */
     .metric-card {
-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.85) 100%);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border: 1px solid rgba(255, 255, 255, 0.08);
@@ -68,13 +90,14 @@ st.markdown("""
         position: relative;
         overflow: hidden;
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-        transition: all 0.25s ease-in-out;
+        transform-style: preserve-3d;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
     }
 
     .metric-card:hover {
-        transform: translateY(-3px);
-        border-color: rgba(56, 189, 248, 0.4);
-        box-shadow: 0 15px 30px -5px rgba(56, 189, 248, 0.15);
+        transform: translateY(-5px) translateZ(12px) scale(1.02);
+        border-color: rgba(56, 189, 248, 0.5);
+        box-shadow: 0 20px 35px -5px rgba(56, 189, 248, 0.25), 0 10px 15px -5px rgba(0, 0, 0, 0.5);
     }
 
     .metric-card.highlight-gcn {
@@ -147,16 +170,17 @@ st.markdown("""
         border: 1px solid rgba(251, 191, 36, 0.3);
     }
 
-    /* Hero Header Banner */
+    /* Hero Header Banner with 3D Depth */
     .hero-banner {
-        background: radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0) 50%),
-                    radial-gradient(circle at 90% 80%, rgba(192, 132, 252, 0.12) 0%, rgba(15, 23, 42, 0) 50%),
+        background: radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.15) 0%, rgba(15, 23, 42, 0) 50%),
+                    radial-gradient(circle at 90% 80%, rgba(192, 132, 252, 0.15) 0%, rgba(15, 23, 42, 0) 50%),
                     linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 20px;
         padding: 28px 32px;
         margin-bottom: 25px;
         box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        transform-style: preserve-3d;
     }
 
     .hero-title {
@@ -183,6 +207,11 @@ st.markdown("""
         border-radius: 14px;
         padding: 12px;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+        transition: transform 0.25s ease;
+    }
+
+    .glass-img-container:hover {
+        transform: translateY(-2px);
     }
 
     /* Styled Tabs */
@@ -208,6 +237,7 @@ st.markdown("""
         background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(192, 132, 252, 0.2) 100%) !important;
         color: #F8FAFC !important;
         border: 1px solid rgba(56, 189, 248, 0.3) !important;
+        box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -217,13 +247,13 @@ st.markdown("""
 <div class="hero-banner">
     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
         <span class="badge-pill badge-blue">🕸️ OGBN-ARXIV 169K</span>
-        <span class="badge-pill badge-purple">⚡ PyTorch Geometric 2.8</span>
+        <span class="badge-pill badge-purple">🎮 3D Scroll & Orbit Enabled</span>
         <span class="badge-pill badge-green">🏆 GCN Peak: 58.64%</span>
         <span class="badge-pill badge-amber">⏱️ GCN 3.25x Faster</span>
     </div>
     <div class="hero-title">OGBN-Arxiv Deep Graph Intelligence Suite</div>
     <div class="hero-desc">
-        End-to-end representation learning and empirical benchmark evaluating <b>Spectral Graph Convolutional Networks (GCN)</b> versus <b>Spatial Multi-Head Graph Attention Networks (GAT)</b> on the 169,343-node Microsoft Academic citation network.
+        End-to-end representation learning and empirical benchmark evaluating <b>Spectral Graph Convolutional Networks (GCN)</b> versus <b>Spatial Multi-Head Graph Attention Networks (GAT)</b> on the 169,343-node Microsoft Academic citation network with <b>3D interactive manifold scroll exploration</b>.
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -240,10 +270,19 @@ with st.sidebar:
     st.markdown("""
     <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 12px; margin-bottom: 16px;">
         <div style="color: #10B981; font-weight: 700; font-size: 0.9rem;">✅ Pipeline Status: Ready</div>
-        <div style="color: #94A3B8; font-size: 0.78rem; margin-top: 3px;">All 8 experimental tasks completed & verified</div>
+        <div style="color: #94A3B8; font-size: 0.78rem; margin-top: 3px;">All 8 experimental tasks & 3D models verified</div>
     </div>
     """, unsafe_allow_html=True)
 
+    st.markdown("#### 🎮 3D Navigation Tips")
+    st.markdown("""
+    - **Mouse Scroll Wheel**: Zoom in/out in 3D
+    - **Left Click + Drag**: Rotate 3D camera 360°
+    - **Right Click + Drag**: Pan 3D viewport
+    - **Double Click**: Reset 3D camera
+    """)
+
+    st.markdown("---")
     st.markdown("#### 📦 Dataset Specification")
     st.markdown("""
     - **Benchmark:** `ogbn-arxiv`
@@ -267,11 +306,11 @@ with st.sidebar:
 
 # Main Navigation Tabs
 tab_graph, tab_train, tab_eval, tab_class, tab_embed = st.tabs([
-    "📊 Graph Analytics",
+    "📊 3D Graph & Topology",
     "📈 Training Dynamics",
     "🏆 Model Evaluation",
     "🔬 Node Classification Lookup",
-    "🌌 Embeddings & Explainability"
+    "🌌 3D Embeddings & Manifold"
 ])
 
 summary_file = RESULTS / "graph_analysis" / "graph_summary.csv"
