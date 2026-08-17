@@ -3,10 +3,40 @@ import pandas as pd
 import streamlit as st
 
 
+def _resolve_candidate_file(candidate_name: str, preferred_dir: Path | None = None) -> Path | None:
+    """Multi-path search to reliably resolve result files across local and cloud environments."""
+    candidates = []
+    if preferred_dir is not None:
+        candidates.append(preferred_dir / candidate_name)
+        candidates.append(preferred_dir.parent / candidate_name)
+    
+    current_dir = Path(__file__).resolve().parent
+    dashboard_dir = current_dir.parent
+    project_root = dashboard_dir.parent
+    
+    candidates.extend([
+        project_root / "results" / "evaluation" / candidate_name,
+        project_root / "results" / candidate_name,
+        dashboard_dir / "results" / "evaluation" / candidate_name,
+        dashboard_dir / "results" / candidate_name,
+        Path.cwd() / "results" / "evaluation" / candidate_name,
+        Path.cwd() / "results" / candidate_name,
+        Path("results/evaluation") / candidate_name,
+        Path("results") / candidate_name,
+    ])
+    
+    for path in candidates:
+        if path.exists():
+            return path
+    return None
+
+
 def render_classification_demo(predictions_file: Path | None = None) -> None:
     if predictions_file is None:
         dashboard_dir = Path(__file__).resolve().parent.parent
         predictions_file = dashboard_dir.parent / "results" / "evaluation" / "paper_predictions.csv"
+
+    resolved_pred_file = _resolve_candidate_file("paper_predictions.csv", predictions_file.parent if predictions_file else None)
 
     st.markdown("""
     <div style="margin-bottom: 20px;">
@@ -19,11 +49,11 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
     </div>
     """, unsafe_allow_html=True)
 
-    if not predictions_file.exists():
+    if not resolved_pred_file or not resolved_pred_file.exists():
         st.info("💡 Run the evaluation notebook to export paper-level predictions for interactive lookup.")
         return
 
-    df = pd.read_csv(predictions_file)
+    df = pd.read_csv(resolved_pred_file)
     total_samples = len(df)
     gcn_correct_cnt = int(df["gcn_correct"].sum())
     gat_correct_cnt = int(df["gat_correct"].sum())
@@ -124,7 +154,7 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
     with c_count:
         st.markdown(f"<span style='color: #94A3B8; font-size: 0.9rem;'>Displaying <b style='color: #38BDF8;'>{len(filtered_df):,}</b> matching publications</span>", unsafe_allow_html=True)
     with c_rand:
-        if st.button("🎲 Pick Random Paper", width="stretch"):
+        if st.button("🎲 Pick Random Paper", use_container_width=True):
             if len(filtered_df) > 0:
                 random_pick = int(filtered_df.sample(1)["node_id"].iloc[0])
                 st.session_state["selected_inspect_node"] = random_pick
@@ -144,7 +174,7 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
             "gcn_pred": "GCN Prediction",
             "gat_pred": "GAT Prediction"
         }),
-        width="stretch",
+        use_container_width=True,
         hide_index=True
     )
 

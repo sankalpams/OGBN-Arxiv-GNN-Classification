@@ -6,12 +6,49 @@ import plotly.graph_objects as go
 import streamlit as st
 
 
-def render_3d_citation_graph(json_path: Path) -> go.Figure | None:
-    if not json_path.exists():
+def _resolve_candidate_file(candidate_name: str, preferred_dir: Path | None = None) -> Path | None:
+    """Multi-path search to reliably resolve result files across local and cloud environments."""
+    candidates = []
+    if preferred_dir is not None:
+        candidates.append(preferred_dir / candidate_name)
+        candidates.append(preferred_dir.parent / candidate_name)
+    
+    current_dir = Path(__file__).resolve().parent
+    dashboard_dir = current_dir.parent
+    project_root = dashboard_dir.parent
+    
+    candidates.extend([
+        project_root / "results" / "graph_analysis" / candidate_name,
+        project_root / "results" / candidate_name,
+        dashboard_dir / "results" / "graph_analysis" / candidate_name,
+        dashboard_dir / "results" / candidate_name,
+        Path.cwd() / "results" / "graph_analysis" / candidate_name,
+        Path.cwd() / "results" / candidate_name,
+        Path("results/graph_analysis") / candidate_name,
+        Path("results") / candidate_name,
+    ])
+    
+    for path in candidates:
+        if path.exists():
+            return path
+    return None
+
+
+def render_3d_citation_graph(json_path: Path | None = None) -> go.Figure | None:
+    target_path = None
+    if json_path is not None and json_path.exists():
+        target_path = json_path
+    else:
+        target_path = _resolve_candidate_file("subgraph_3d.json", json_path.parent if json_path else None)
+        
+    if target_path is None or not target_path.exists():
         return None
     
-    with open(json_path, "r") as f:
-        data = json.load(f)
+    try:
+        with open(target_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return None
         
     nodes = data.get("nodes", [])
     edges = data.get("edges", [])
@@ -23,8 +60,8 @@ def render_3d_citation_graph(json_path: Path) -> go.Figure | None:
     # 3D Edges Trace
     edge_x, edge_y, edge_z = [], [], []
     for edge in edges:
-        u_id = edge["source"]
-        v_id = edge["target"]
+        u_id = edge.get("source")
+        v_id = edge.get("target")
         if u_id in node_dict and v_id in node_dict:
             u = node_dict[u_id]
             v = node_dict[v_id]
@@ -189,7 +226,7 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#E2E8F0")
         )
-        st.plotly_chart(fig_donut, width="stretch")
+        st.plotly_chart(fig_donut, use_container_width=True)
 
     with col_right:
         st.markdown("#### 📐 Topological Metrics Summary")
@@ -201,7 +238,7 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
             elif formatted_df[col].dtype == int or "int" in str(formatted_df[col].dtype):
                 formatted_df[col] = formatted_df[col].apply(lambda x: f"{x:,}")
         
-        st.dataframe(formatted_df, width="stretch", hide_index=True)
+        st.dataframe(formatted_df, use_container_width=True, hide_index=True)
         
         st.markdown("""
         <div style="background: rgba(30, 41, 59, 0.6); padding: 14px 18px; border-radius: 10px; border-left: 4px solid #38BDF8; margin-top: 10px;">
@@ -221,9 +258,9 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
         "📊 2D Distribution & Topology Artifacts"
     ])
 
-    subgraph_3d_file = graph_analysis_dir / "subgraph_3d.json"
-    deg_plot = graph_analysis_dir / "degree_distribution.png"
-    subgraph_plot = graph_analysis_dir / "sample_subgraph.png"
+    subgraph_3d_file = _resolve_candidate_file("subgraph_3d.json", graph_analysis_dir)
+    deg_plot = _resolve_candidate_file("degree_distribution.png", graph_analysis_dir)
+    subgraph_plot = _resolve_candidate_file("sample_subgraph.png", graph_analysis_dir)
 
     with tab_3d_graph:
         st.markdown("""
@@ -236,20 +273,20 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
         """, unsafe_allow_html=True)
         fig_3d = render_3d_citation_graph(subgraph_3d_file)
         if fig_3d is not None:
-            st.plotly_chart(fig_3d, width="stretch")
+            st.plotly_chart(fig_3d, use_container_width=True)
         else:
             st.info("3D Subgraph data file not found.")
 
     with tab_2d_plots:
         col_img1, col_img2 = st.columns(2)
         with col_img1:
-            if deg_plot.exists():
+            if deg_plot and deg_plot.exists():
                 st.markdown("<div class='glass-img-container'>", unsafe_allow_html=True)
-                st.image(str(deg_plot), caption="📊 Power-Law Degree Distribution (Log Scale)", width="stretch")
+                st.image(str(deg_plot), caption="📊 Power-Law Degree Distribution (Log Scale)", use_container_width=True)
                 st.markdown("</div>", unsafe_allow_html=True)
                 
         with col_img2:
-            if subgraph_plot.exists():
+            if subgraph_plot and subgraph_plot.exists():
                 st.markdown("<div class='glass-img-container'>", unsafe_allow_html=True)
-                st.image(str(subgraph_plot), caption="🕸️ Local 2-Hop Ego Citation Subgraph Structure", width="stretch")
+                st.image(str(subgraph_plot), caption="🕸️ Local 2-Hop Ego Citation Subgraph Structure", use_container_width=True)
                 st.markdown("</div>", unsafe_allow_html=True)

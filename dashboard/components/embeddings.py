@@ -5,6 +5,34 @@ import plotly.graph_objects as go
 import streamlit as st
 
 
+def _resolve_candidate_file(candidate_name: str, preferred_dir: Path | None = None) -> Path | None:
+    """Multi-path search to reliably resolve result files across local and cloud environments."""
+    candidates = []
+    if preferred_dir is not None:
+        candidates.append(preferred_dir / candidate_name)
+        candidates.append(preferred_dir.parent / candidate_name)
+    
+    current_dir = Path(__file__).resolve().parent
+    dashboard_dir = current_dir.parent
+    project_root = dashboard_dir.parent
+    
+    candidates.extend([
+        project_root / "results" / "explainability" / candidate_name,
+        project_root / "results" / candidate_name,
+        dashboard_dir / "results" / "explainability" / candidate_name,
+        dashboard_dir / "results" / candidate_name,
+        Path.cwd() / "results" / "explainability" / candidate_name,
+        Path.cwd() / "results" / candidate_name,
+        Path("results/explainability") / candidate_name,
+        Path("results") / candidate_name,
+    ])
+    
+    for path in candidates:
+        if path.exists():
+            return path
+    return None
+
+
 def render_embedding_image(explain_dir: Path | None = None) -> None:
     if explain_dir is None:
         dashboard_dir = Path(__file__).resolve().parent.parent
@@ -57,9 +85,9 @@ def render_embedding_image(explain_dir: Path | None = None) -> None:
 
     st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
 
-    pca_plot = explain_dir / "pca_embeddings.png"
-    tsne_plot = explain_dir / "tsne_embeddings.png"
-    emb_3d_file = explain_dir / "embeddings_3d.csv"
+    pca_plot = _resolve_candidate_file("pca_embeddings.png", explain_dir)
+    tsne_plot = _resolve_candidate_file("tsne_embeddings.png", explain_dir)
+    emb_3d_file = _resolve_candidate_file("embeddings_3d.csv", explain_dir)
 
     tab_3d, tab_tsne, tab_pca, tab_side = st.tabs([
         "🎮 3D Interactive Scroll & Orbit Explorer",
@@ -81,7 +109,8 @@ def render_embedding_image(explain_dir: Path | None = None) -> None:
         </div>
         """, unsafe_allow_html=True)
 
-        if emb_3d_file.exists():
+    if emb_3d_file and emb_3d_file.exists():
+        with tab_3d:
             df_3d = pd.read_csv(emb_3d_file)
 
             col_ctrl1, col_ctrl2, col_ctrl3 = st.columns([1.5, 1.5, 1.2])
@@ -159,8 +188,9 @@ def render_embedding_image(explain_dir: Path | None = None) -> None:
                 )
             )
 
-            st.plotly_chart(fig_3d, width="stretch")
-        else:
+            st.plotly_chart(fig_3d, use_container_width=True)
+    else:
+        with tab_3d:
             st.info("3D Latent coordinates file (embeddings_3d.csv) not found.")
 
     with tab_tsne:
@@ -172,8 +202,8 @@ def render_embedding_image(explain_dir: Path | None = None) -> None:
             </span>
         </div>
         """, unsafe_allow_html=True)
-        if tsne_plot.exists():
-            st.image(str(tsne_plot), caption="t-SNE 2D Manifold Embedding Clustered by Research Topic", width="stretch")
+        if tsne_plot and tsne_plot.exists():
+            st.image(str(tsne_plot), caption="t-SNE 2D Manifold Embedding Clustered by Research Topic", use_container_width=True)
         else:
             st.info("Run Notebook 08 to generate t-SNE embedding visualization.")
 
@@ -186,16 +216,16 @@ def render_embedding_image(explain_dir: Path | None = None) -> None:
             </span>
         </div>
         """, unsafe_allow_html=True)
-        if pca_plot.exists():
-            st.image(str(pca_plot), caption="PCA 2D Linear Projection of Learned Node Embeddings (Colored by Subject Area)", width="stretch")
+        if pca_plot and pca_plot.exists():
+            st.image(str(pca_plot), caption="PCA 2D Linear Projection of Learned Node Embeddings (Colored by Subject Area)", use_container_width=True)
         else:
             st.info("Run Notebook 08 to generate PCA embedding visualization.")
 
     with tab_side:
         c1, c2 = st.columns(2)
         with c1:
-            if pca_plot.exists():
-                st.image(str(pca_plot), caption="PCA (Linear Global Geometry)", width="stretch")
+            if pca_plot and pca_plot.exists():
+                st.image(str(pca_plot), caption="PCA (Linear Global Geometry)", use_container_width=True)
         with c2:
-            if tsne_plot.exists():
-                st.image(str(tsne_plot), caption="t-SNE (Non-Linear Local Manifolds)", width="stretch")
+            if tsne_plot and tsne_plot.exists():
+                st.image(str(tsne_plot), caption="t-SNE (Non-Linear Local Manifolds)", use_container_width=True)

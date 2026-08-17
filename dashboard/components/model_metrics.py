@@ -5,6 +5,34 @@ import plotly.graph_objects as go
 import streamlit as st
 
 
+def _resolve_candidate_file(candidate_name: str, preferred_dir: Path | None = None) -> Path | None:
+    """Multi-path search to reliably resolve result files across local and cloud environments."""
+    candidates = []
+    if preferred_dir is not None:
+        candidates.append(preferred_dir / candidate_name)
+        candidates.append(preferred_dir.parent / candidate_name)
+    
+    current_dir = Path(__file__).resolve().parent
+    dashboard_dir = current_dir.parent
+    project_root = dashboard_dir.parent
+    
+    candidates.extend([
+        project_root / "results" / "evaluation" / candidate_name,
+        project_root / "results" / candidate_name,
+        dashboard_dir / "results" / "evaluation" / candidate_name,
+        dashboard_dir / "results" / candidate_name,
+        Path.cwd() / "results" / "evaluation" / candidate_name,
+        Path.cwd() / "results" / candidate_name,
+        Path("results/evaluation") / candidate_name,
+        Path("results") / candidate_name,
+    ])
+    
+    for path in candidates:
+        if path.exists():
+            return path
+    return None
+
+
 def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None) -> None:
     if eval_dir is None:
         dashboard_dir = Path(__file__).resolve().parent.parent
@@ -104,7 +132,7 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
             margin=dict(l=20, r=20, t=30, b=20),
             height=320
         )
-        st.plotly_chart(fig_bar, width="stretch")
+        st.plotly_chart(fig_bar, use_container_width=True)
 
     with col_radar:
         st.markdown("#### 🕸️ Multidimensional Performance Radar")
@@ -140,13 +168,13 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
             margin=dict(l=30, r=30, t=30, b=20),
             height=320
         )
-        st.plotly_chart(fig_radar, width="stretch")
+        st.plotly_chart(fig_radar, use_container_width=True)
 
     st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
 
     # Detailed Table
     st.markdown("#### 📋 Raw Metric Values")
-    st.dataframe(metrics_df, width="stretch", hide_index=True)
+    st.dataframe(metrics_df, use_container_width=True, hide_index=True)
 
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
 
@@ -154,16 +182,16 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
     st.markdown("#### 🎯 40-Class Test Confusion Matrices")
     tab_cm_gcn, tab_cm_gat, tab_cm_comp = st.tabs(["🔹 GCN Matrix", "🔸 GAT Matrix", "📊 Side-by-Side Comparison"])
 
-    cm_gcn = eval_dir / "confusion_matrix_gcn.png"
-    cm_gat = eval_dir / "confusion_matrix_gat.png"
-    comp_plot = eval_dir / "model_comparison.png"
+    cm_gcn = _resolve_candidate_file("confusion_matrix_gcn.png", eval_dir)
+    cm_gat = _resolve_candidate_file("confusion_matrix_gat.png", eval_dir)
+    comp_plot = _resolve_candidate_file("model_comparison.png", eval_dir)
 
     with tab_cm_gcn:
-        if cm_gcn.exists():
-            st.image(str(cm_gcn), caption="GCN Confusion Matrix across 40 arXiv Subject Categories", width="stretch")
+        if cm_gcn and cm_gcn.exists():
+            st.image(str(cm_gcn), caption="GCN Confusion Matrix across 40 arXiv Subject Categories", use_container_width=True)
     with tab_cm_gat:
-        if cm_gat.exists():
-            st.image(str(cm_gat), caption="GAT Confusion Matrix across 40 arXiv Subject Categories", width="stretch")
+        if cm_gat and cm_gat.exists():
+            st.image(str(cm_gat), caption="GAT Confusion Matrix across 40 arXiv Subject Categories", use_container_width=True)
     with tab_cm_comp:
-        if comp_plot.exists():
-            st.image(str(comp_plot), caption="Full Comparative Bar Plot across All Metrics", width="stretch")
+        if comp_plot and comp_plot.exists():
+            st.image(str(comp_plot), caption="Full Comparative Bar Plot across All Metrics", use_container_width=True)
