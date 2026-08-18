@@ -122,12 +122,20 @@ st.markdown(f"""
         color: #FFFFFF;
     }}
 
-    /* Main Container with 3D Depth */
+    /* Main Container with 3D Depth & Breathing Room */
     .main .block-container {{
-        padding-top: 1.6rem;
-        padding-bottom: 3.2rem;
-        max-width: 1420px;
+        padding-top: 2rem !important;
+        padding-bottom: 4.5rem !important;
+        padding-left: 2.2rem !important;
+        padding-right: 2.2rem !important;
+        max-width: 1440px !important;
         perspective: 1400px;
+    }}
+
+    /* Grid Column Spacing */
+    [data-testid="column"] {{
+        padding: 0 12px !important;
+        margin-bottom: 18px !important;
     }}
 
     /* Floating Liquid Ambient Orbs in Background */
@@ -197,7 +205,7 @@ st.markdown(f"""
     }}
 
     /* =========================================================
-       LIQUID GLASS CARDS & SURFACES
+       LIQUID GLASS CARDS & SURFACES WITH SPACIOUS PADDING
        ========================================================= */
     .liquid-glass-card, .metric-card {{
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(11, 17, 32, 0.72) !important;
@@ -207,7 +215,8 @@ st.markdown(f"""
         border-top: 1px solid rgba(255, 255, 255, 0.32) !important;
         border-left: 1px solid rgba(255, 255, 255, 0.22) !important;
         border-radius: 18px !important;
-        padding: 22px 24px !important;
+        padding: 24px 26px !important;
+        margin-bottom: 20px !important;
         position: relative !important;
         overflow: hidden !important;
         box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.55),
@@ -260,7 +269,7 @@ st.markdown(f"""
 
     .metric-icon {{
         font-size: 2rem;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         filter: drop-shadow(0 2px 8px var(--aura-glow));
     }}
 
@@ -280,18 +289,18 @@ st.markdown(f"""
         text-transform: uppercase;
         letter-spacing: 0.06em;
         color: #94A3B8;
-        margin-top: 6px;
+        margin-top: 8px;
     }}
 
     .metric-sub {{
         font-size: 0.78rem;
         color: #64748B;
-        margin-top: 4px;
+        margin-top: 5px;
         font-weight: 500;
     }}
 
     /* =========================================================
-       HERO HEADER BANNER WITH LIQUID CAUSTICS
+       HERO HEADER BANNER WITH LIQUID CAUSTICS & BREATHING SPACE
        ========================================================= */
     .hero-banner {{
         background: radial-gradient(120% 140% at 50% 5%, rgba(255, 255, 255, 0.10) 0%, rgba(15, 23, 42, 0.85) 60%, rgba(6, 9, 19, 0.95) 100%);
@@ -301,8 +310,8 @@ st.markdown(f"""
         border-top: 1px solid rgba(255, 255, 255, 0.38);
         border-left: 1px solid rgba(255, 255, 255, 0.25);
         border-radius: 24px;
-        padding: 34px 38px;
-        margin-bottom: 30px;
+        padding: 36px 42px;
+        margin-bottom: 34px;
         position: relative;
         overflow: hidden;
         box-shadow: 0 28px 60px -12px rgba(0, 0, 0, 0.65),
@@ -337,7 +346,7 @@ st.markdown(f"""
         background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 40%, var(--aura-primary) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         line-height: 1.15;
     }}
 
@@ -345,7 +354,7 @@ st.markdown(f"""
         color: #94A3B8;
         font-size: 1.05rem;
         max-width: 920px;
-        line-height: 1.6;
+        line-height: 1.65;
     }}
 
     /* =========================================================
@@ -355,7 +364,9 @@ st.markdown(f"""
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 5px 14px;
+        padding: 6px 16px;
+        margin-right: 8px;
+        margin-bottom: 8px;
         border-radius: 9999px;
         font-size: 0.76rem;
         font-weight: 700;
@@ -399,51 +410,52 @@ st.markdown(f"""
     /* =========================================================
        STREAMLIT TABS OVERHAUL (LIQUID FROSTED CAPSULES & HOVER)
        ========================================================= */
-    /* Remove default Streamlit red/orange underline highlight and bottom borders */
+    /* Eradicate default Streamlit red underline highlight and bottom border lines */
     div[data-baseweb="tab-highlight"],
     [data-baseweb="tab-highlight"],
     div[data-baseweb="tab-border"],
     [data-baseweb="tab-border"],
-    [data-testid="stTabs"] div[data-baseweb="tab-highlight"],
-    [data-testid="stTabs"] div[data-baseweb="tab-border"],
+    [data-testid="stTabs"] [data-baseweb="tab-highlight"],
+    [data-testid="stTabs"] [data-baseweb="tab-border"],
     .stTabs [data-baseweb="tab-highlight"],
     .stTabs [data-baseweb="tab-border"] {{
         display: none !important;
         background: transparent !important;
+        background-color: transparent !important;
         height: 0 !important;
         width: 0 !important;
         opacity: 0 !important;
         visibility: hidden !important;
+        border: none !important;
     }}
 
-    /* Tab List Container Bar */
+    /* Tab List Container Bar with Breathing Space */
     [data-testid="stTabs"] > div:first-child,
     div[data-testid="stTabsNav"],
     div[data-baseweb="tab-list"],
     div[role="tablist"],
     .stTabs [data-baseweb="tab-list"],
     .stTabs div[role="tablist"] {{
-        gap: 10px !important;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(15, 23, 42, 0.8) 100%) !important;
-        backdrop-filter: blur(24px) saturate(190%) contrast(108%) !important;
-        -webkit-backdrop-filter: blur(24px) saturate(190%) contrast(108%) !important;
-        padding: 8px 10px !important;
-        border-radius: 18px !important;
+        gap: 12px !important;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(15, 23, 42, 0.85) 100%) !important;
+        backdrop-filter: blur(28px) saturate(200%) contrast(108%) !important;
+        -webkit-backdrop-filter: blur(28px) saturate(200%) contrast(108%) !important;
+        padding: 10px 14px !important;
+        border-radius: 20px !important;
         border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.28) !important;
-        border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
-        box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.55),
-                    0 0 20px -4px var(--aura-glow),
-                    inset 0 1px 1px 0 rgba(255, 255, 255, 0.3),
-                    inset 0 -8px 16px -8px rgba(0, 0, 0, 0.3) !important;
-        margin-bottom: 22px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.22) !important;
+        box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.6),
+                    0 0 24px -4px var(--aura-glow),
+                    inset 0 1px 1px 0 rgba(255, 255, 255, 0.3) !important;
+        margin-bottom: 30px !important;
         display: flex !important;
         flex-wrap: wrap !important;
         align-items: center !important;
         border-bottom: none !important;
     }}
 
-    /* Individual Tab Buttons - Default / Inactive */
+    /* Individual Tab Buttons - Default / Inactive with distinct pill separation */
     [data-testid="stTabs"] button,
     button[data-testid="stTab"],
     div[data-baseweb="tab-list"] button,
@@ -452,24 +464,37 @@ st.markdown(f"""
     .stTabs button,
     .stTabs [data-baseweb="tab"] {{
         height: 44px !important;
-        padding: 0 20px !important;
-        border-radius: 12px !important;
-        background: rgba(255, 255, 255, 0.03) !important;
+        padding: 8px 22px !important;
+        margin: 3px 4px !important;
+        border-radius: 13px !important;
+        background: rgba(255, 255, 255, 0.04) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
         border-top: 1px solid rgba(255, 255, 255, 0.18) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
         color: #94A3B8 !important;
         font-family: 'Outfit', sans-serif !important;
         font-weight: 700 !important;
-        font-size: 0.93rem !important;
+        font-size: 0.94rem !important;
         letter-spacing: -0.01em !important;
         cursor: pointer !important;
         transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
         outline: none !important;
-        box-shadow: none !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
         white-space: nowrap !important;
+    }}
+
+    /* Text & Icon color overrides inside tabs */
+    [data-testid="stTabs"] button *,
+    button[data-baseweb="tab"] *,
+    button[data-testid="stTab"] *,
+    div[role="tablist"] button * {{
+        color: #94A3B8 !important;
+        font-size: 0.94rem !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
     }}
 
     /* Tab Hover Effect - Smooth Lift, Specular Glow & Rounded Corners */
@@ -481,15 +506,22 @@ st.markdown(f"""
     .stTabs button:hover,
     .stTabs [data-baseweb="tab"]:hover {{
         color: #FFFFFF !important;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(56, 189, 248, 0.16) 100%) !important;
-        border-color: rgba(56, 189, 248, 0.45) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.45) !important;
-        transform: translateY(-3px) scale(1.025) !important;
-        box-shadow: 0 10px 22px -4px rgba(56, 189, 248, 0.3),
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(56, 189, 248, 0.18) 100%) !important;
+        border-color: rgba(56, 189, 248, 0.5) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.5) !important;
+        border-bottom: 1px solid rgba(56, 189, 248, 0.5) !important;
+        transform: translateY(-3px) scale(1.03) !important;
+        box-shadow: 0 10px 24px -4px rgba(56, 189, 248, 0.35),
                     inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
     }}
 
-    /* Tab Active / Selected State - Glowing Liquid Glass Pill */
+    [data-testid="stTabs"] button:hover *,
+    button[data-testid="stTab"]:hover *,
+    button[data-baseweb="tab"]:hover * {{
+        color: #FFFFFF !important;
+    }}
+
+    /* Tab Active / Selected State - Glowing Liquid Glass Pill (No Red Colors/Lines) */
     [data-testid="stTabs"] button[aria-selected="true"],
     button[data-testid="stTab"][aria-selected="true"],
     div[data-baseweb="tab-list"] button[aria-selected="true"],
@@ -497,30 +529,27 @@ st.markdown(f"""
     div[role="tablist"] button[role="tab"][aria-selected="true"],
     .stTabs button[aria-selected="true"],
     .stTabs [data-baseweb="tab"][aria-selected="true"] {{
-        background: linear-gradient(135deg, rgba(56, 189, 248, 0.26) 0%, rgba(192, 132, 252, 0.20) 100%), rgba(15, 23, 42, 0.9) !important;
+        background: linear-gradient(135deg, rgba(56, 189, 248, 0.28) 0%, rgba(192, 132, 252, 0.22) 100%), rgba(15, 23, 42, 0.95) !important;
         color: #FFFFFF !important;
         font-weight: 800 !important;
-        border: 1px solid rgba(56, 189, 248, 0.55) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.6) !important;
-        box-shadow: 0 10px 25px -4px rgba(56, 189, 248, 0.35),
-                    0 0 16px -2px rgba(56, 189, 248, 0.25),
-                    inset 0 1px 2px rgba(255, 255, 255, 0.5) !important;
+        border: 1px solid rgba(56, 189, 248, 0.65) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.7) !important;
+        border-bottom: 1px solid rgba(56, 189, 248, 0.65) !important;
+        box-shadow: 0 10px 28px -4px rgba(56, 189, 248, 0.4),
+                    0 0 18px -2px rgba(56, 189, 248, 0.3),
+                    inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
         transform: translateY(-2px) !important;
     }}
 
-    /* Text & Icon styling inside tabs */
-    [data-testid="stTabs"] button p,
-    button[data-baseweb="tab"] p,
-    div[role="tablist"] button p,
-    .stTabs [data-baseweb="tab"] p {{
-        font-size: 0.93rem !important;
-        font-weight: 700 !important;
-        margin: 0 !important;
-        color: inherit !important;
+    [data-testid="stTabs"] button[aria-selected="true"] *,
+    button[data-testid="stTab"][aria-selected="true"] *,
+    button[data-baseweb="tab"][aria-selected="true"] * {{
+        color: #FFFFFF !important;
+        font-weight: 800 !important;
     }}
 
     /* =========================================================
-       IMAGE AND CHART CONTAINERS
+       IMAGE AND CHART CONTAINERS WITH SPACIOUS BREATHING ROOM
        ========================================================= */
     .glass-img-container {{
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(15, 23, 42, 0.8) 100%) !important;
@@ -529,7 +558,8 @@ st.markdown(f"""
         border: 1px solid rgba(255, 255, 255, 0.12) !important;
         border-top: 1px solid rgba(255, 255, 255, 0.25) !important;
         border-radius: 18px !important;
-        padding: 14px;
+        padding: 22px 26px !important;
+        margin-bottom: 26px !important;
         box-shadow: 0 14px 32px -6px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.2);
         transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }}
