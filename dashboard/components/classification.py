@@ -39,12 +39,12 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
     resolved_pred_file = _resolve_candidate_file("paper_predictions.csv", predictions_file.parent if predictions_file else None)
 
     st.markdown("""
-    <div style="margin-bottom: 20px;">
-        <h2 style="margin: 0; font-weight: 700; font-size: 1.6rem; color: #F8FAFC;">
+    <div style="margin-bottom: 22px;">
+        <h2 style="margin: 0; font-weight: 800; font-size: 1.7rem; color: #FFFFFF; letter-spacing: -0.02em;">
             🔬 Real-Time Paper Classification & Node Lookup
         </h2>
-        <p style="color: #94A3B8; margin-top: 4px; font-size: 0.95rem;">
-            Search and inspect individual academic paper predictions, model agreements, and classification errors.
+        <p style="color: #94A3B8; margin-top: 5px; font-size: 0.98rem; line-height: 1.5;">
+            Search and inspect individual academic paper predictions, model agreements, and classification errors via liquid glass query cockpit.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -59,7 +59,7 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
     gat_correct_cnt = int(df["gat_correct"].sum())
     agreement_cnt = int((df["gcn_pred"] == df["gat_pred"]).sum())
 
-    # Metrics Summary Cards
+    # Liquid Glass Metrics Summary Cards
     m1, m2, m3, m4 = st.columns(4)
     with m1:
         st.markdown(f"""
@@ -72,35 +72,42 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
         """, unsafe_allow_html=True)
     with m2:
         st.markdown(f"""
-        <div class="metric-card">
+        <div class="metric-card highlight-gcn">
             <div class="metric-icon">🔹</div>
             <div class="metric-value" style="color: #38BDF8;">{(gcn_correct_cnt/total_samples)*100:.1f}%</div>
             <div class="metric-label">GCN Accuracy</div>
-            <div class="metric-sub">{gcn_correct_cnt:,} / {total_samples:,} correct</div>
+            <div class="metric-sub" style="color: #38BDF8;">{gcn_correct_cnt:,} / {total_samples:,} correct</div>
         </div>
         """, unsafe_allow_html=True)
     with m3:
         st.markdown(f"""
-        <div class="metric-card">
+        <div class="metric-card highlight-gat">
             <div class="metric-icon">🔸</div>
             <div class="metric-value" style="color: #C084FC;">{(gat_correct_cnt/total_samples)*100:.1f}%</div>
             <div class="metric-label">GAT Accuracy</div>
-            <div class="metric-sub">{gat_correct_cnt:,} / {total_samples:,} correct</div>
+            <div class="metric-sub" style="color: #C084FC;">{gat_correct_cnt:,} / {total_samples:,} correct</div>
         </div>
         """, unsafe_allow_html=True)
     with m4:
         st.markdown(f"""
         <div class="metric-card">
             <div class="metric-icon">🤝</div>
-            <div class="metric-value" style="color: #10B981;">{(agreement_cnt/total_samples)*100:.1f}%</div>
+            <div class="metric-value" style="color: #34D399;">{(agreement_cnt/total_samples)*100:.1f}%</div>
             <div class="metric-label">Model Consensus</div>
-            <div class="metric-sub">{agreement_cnt:,} identical predictions</div>
+            <div class="metric-sub" style="color: #34D399;">{agreement_cnt:,} identical predictions</div>
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
 
-    # Search & Filter Controls
+    # Search & Filter Controls in Liquid Glass Card
+    st.markdown("""
+    <div class="glass-img-container" style="padding: 18px 20px; margin-bottom: 16px;">
+        <div style="font-weight: 700; font-size: 1.05rem; color: #F8FAFC; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span>⚡ Interactive Query & Filter Engine</span>
+        </div>
+    """, unsafe_allow_html=True)
+
     col_search, col_cat, col_filter = st.columns([1.8, 1.4, 1.4])
 
     with col_search:
@@ -152,20 +159,26 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
     # Result Count & Quick Randomizer
     c_count, c_rand = st.columns([3, 1])
     with c_count:
-        st.markdown(f"<span style='color: #94A3B8; font-size: 0.9rem;'>Displaying <b style='color: #38BDF8;'>{len(filtered_df):,}</b> matching publications</span>", unsafe_allow_html=True)
+        st.markdown(f"<span style='color: #94A3B8; font-size: 0.92rem;'>Displaying <b style='color: #38BDF8;'>{len(filtered_df):,}</b> matching publications</span>", unsafe_allow_html=True)
     with c_rand:
         if st.button("🎲 Pick Random Paper", use_container_width=True):
             if len(filtered_df) > 0:
                 random_pick = int(filtered_df.sample(1)["node_id"].iloc[0])
                 st.session_state["selected_inspect_node"] = random_pick
 
-    # Interactive Table
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Interactive Table inside Liquid Glass Container
     display_df = filtered_df.copy()
     display_df["GCN Status"] = display_df["gcn_correct"].apply(lambda x: "✅ Correct" if x else "❌ Wrong")
     display_df["GAT Status"] = display_df["gat_correct"].apply(lambda x: "✅ Correct" if x else "❌ Wrong")
     display_df["Consensus"] = (display_df["gcn_pred"] == display_df["gat_pred"]).apply(lambda x: "🤝 Agree" if x else "⚡ Disagree")
 
     cols_to_show = ["node_id", "paper_id", "true_label", "gcn_pred", "GCN Status", "gat_pred", "GAT Status", "Consensus"]
+    
+    st.markdown("""
+    <div class="glass-img-container" style="padding: 12px; margin-bottom: 16px;">
+    """, unsafe_allow_html=True)
     st.dataframe(
         display_df[cols_to_show].rename(columns={
             "node_id": "Node ID",
@@ -177,11 +190,12 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
         use_container_width=True,
         hide_index=True
     )
+    st.markdown("</div>", unsafe_allow_html=True)
 
-    # Detailed Paper Card Inspector
+    # Detailed Paper Card Inspector in Liquid Glass Cockpit
     if len(filtered_df) > 0:
         st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
-        with st.expander("🔍 Deep Paper Inspector & Model Diagnosis", expanded=True):
+        with st.expander("🔍 Deep Paper Inspector & Model Diagnosis Cockpit", expanded=True):
             node_options = filtered_df["node_id"].tolist()
             
             default_index = 0
@@ -204,52 +218,52 @@ def render_classification_demo(predictions_file: Path | None = None) -> None:
             
             with col_p1:
                 st.markdown(f"""
-                <div style="background: rgba(30, 41, 59, 0.7); padding: 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
-                    <div style="color: #94A3B8; font-size: 0.8rem; text-transform: uppercase;">Paper Metadata</div>
-                    <div style="font-size: 1.3rem; font-weight: 700; color: #F8FAFC; margin-top: 4px;">Node #{row['node_id']}</div>
+                <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(15, 23, 42, 0.85) 100%); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12); border-top: 1px solid rgba(255,255,255,0.3); box-shadow: 0 10px 25px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.2);">
+                    <div style="color: #94A3B8; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Paper Metadata</div>
+                    <div style="font-size: 1.35rem; font-weight: 800; color: #FFFFFF; margin-top: 4px;">Node #{row['node_id']}</div>
                     <div style="color: #38BDF8; font-size: 0.9rem; margin-top: 4px;">MAG ID: <code>{row['paper_id']}</code></div>
-                    <div style="margin-top: 12px; padding: 8px 12px; background: rgba(56, 189, 248, 0.1); border-radius: 8px;">
-                        <div style="color: #94A3B8; font-size: 0.75rem;">GROUND TRUTH CATEGORY</div>
-                        <div style="color: #38BDF8; font-weight: 700; font-size: 1.05rem;">{true_cat}</div>
+                    <div style="margin-top: 14px; padding: 10px 14px; background: rgba(56, 189, 248, 0.12); border-radius: 10px; border: 1px solid rgba(56, 189, 248, 0.3);">
+                        <div style="color: #94A3B8; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">GROUND TRUTH CATEGORY</div>
+                        <div style="color: #38BDF8; font-weight: 800; font-size: 1.08rem; margin-top: 2px;">{true_cat}</div>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
 
             with col_p2:
-                gcn_status_badge = "background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #10B981;" if gcn_is_corr else "background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid #EF4444;"
+                gcn_status_badge = "background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid #10B981;" if gcn_is_corr else "background: rgba(239, 68, 68, 0.2); color: #F87171; border: 1px solid #EF4444;"
                 st.markdown(f"""
-                <div style="background: rgba(30, 41, 59, 0.7); padding: 18px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.3);">
+                <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(15, 23, 42, 0.85) 100%); padding: 20px; border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.35); border-top: 1px solid rgba(255, 255, 255, 0.35); box-shadow: 0 10px 25px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.2);">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: #38BDF8; font-weight: 700; font-size: 1.05rem;">🔹 GCN Output</span>
-                        <span style="padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; {gcn_status_badge}">
+                        <span style="color: #38BDF8; font-weight: 800; font-size: 1.1rem;">🔹 GCN Output</span>
+                        <span style="padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; {gcn_status_badge}">
                             {'MATCH' if gcn_is_corr else 'MISMATCH'}
                         </span>
                     </div>
-                    <div style="margin-top: 12px;">
-                        <div style="color: #94A3B8; font-size: 0.8rem;">Predicted Subject:</div>
-                        <div style="font-size: 1.15rem; font-weight: 700; color: #F8FAFC;">{gcn_pred_cat}</div>
+                    <div style="margin-top: 14px;">
+                        <div style="color: #94A3B8; font-size: 0.78rem; font-weight: 600;">Predicted Subject:</div>
+                        <div style="font-size: 1.18rem; font-weight: 800; color: #FFFFFF; margin-top: 2px;">{gcn_pred_cat}</div>
                     </div>
-                    <div style="margin-top: 10px; font-size: 0.85rem; color: {'#10B981' if gcn_is_corr else '#EF4444'};">
+                    <div style="margin-top: 12px; font-size: 0.86rem; font-weight: 600; color: {'#34D399' if gcn_is_corr else '#F87171'};">
                         {gcn_detail_msg}
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
 
             with col_p3:
-                gat_status_badge = "background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #10B981;" if gat_is_corr else "background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid #EF4444;"
+                gat_status_badge = "background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid #10B981;" if gat_is_corr else "background: rgba(239, 68, 68, 0.2); color: #F87171; border: 1px solid #EF4444;"
                 st.markdown(f"""
-                <div style="background: rgba(30, 41, 59, 0.7); padding: 18px; border-radius: 12px; border: 1px solid rgba(192, 132, 252, 0.3);">
+                <div style="background: linear-gradient(135deg, rgba(192, 132, 252, 0.1) 0%, rgba(15, 23, 42, 0.85) 100%); padding: 20px; border-radius: 16px; border: 1px solid rgba(192, 132, 252, 0.35); border-top: 1px solid rgba(255, 255, 255, 0.35); box-shadow: 0 10px 25px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.2);">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: #C084FC; font-weight: 700; font-size: 1.05rem;">🔸 GAT Output</span>
-                        <span style="padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; {gat_status_badge}">
+                        <span style="color: #C084FC; font-weight: 800; font-size: 1.1rem;">🔸 GAT Output</span>
+                        <span style="padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; {gat_status_badge}">
                             {'MATCH' if gat_is_corr else 'MISMATCH'}
                         </span>
                     </div>
-                    <div style="margin-top: 12px;">
-                        <div style="color: #94A3B8; font-size: 0.8rem;">Predicted Subject:</div>
-                        <div style="font-size: 1.15rem; font-weight: 700; color: #F8FAFC;">{gat_pred_cat}</div>
+                    <div style="margin-top: 14px;">
+                        <div style="color: #94A3B8; font-size: 0.78rem; font-weight: 600;">Predicted Subject:</div>
+                        <div style="font-size: 1.18rem; font-weight: 800; color: #FFFFFF; margin-top: 2px;">{gat_pred_cat}</div>
                     </div>
-                    <div style="margin-top: 10px; font-size: 0.85rem; color: {'#10B981' if gat_is_corr else '#EF4444'};">
+                    <div style="margin-top: 12px; font-size: 0.86rem; font-weight: 600; color: {'#34D399' if gat_is_corr else '#F87171'};">
                         {gat_detail_msg}
                     </div>
                 </div>

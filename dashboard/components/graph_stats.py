@@ -138,34 +138,34 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
         dashboard_dir = Path(__file__).resolve().parent.parent
         graph_analysis_dir = dashboard_dir.parent / "results" / "graph_analysis"
 
-    # Header section
+    # Header section with Liquid Glass Typography
     st.markdown("""
-    <div style="margin-bottom: 20px;">
-        <h2 style="margin: 0; font-weight: 700; font-size: 1.6rem; color: #F8FAFC;">
+    <div style="margin-bottom: 22px;">
+        <h2 style="margin: 0; font-weight: 800; font-size: 1.7rem; color: #FFFFFF; letter-spacing: -0.02em;">
             📊 OGBN-Arxiv Network Topology & Macro Properties
         </h2>
-        <p style="color: #94A3B8; margin-top: 4px; font-size: 0.95rem;">
-            Topological characterization of 169,343 computer science publications and 2.3M directed citation links.
+        <p style="color: #94A3B8; margin-top: 5px; font-size: 0.98rem; line-height: 1.5;">
+            Topological characterization of 169,343 computer science publications and 2.3M directed citation links with liquid graph manifolds.
         </p>
     </div>
     """, unsafe_allow_html=True)
 
-    # High-impact KPI cards
+    # High-impact Liquid Glass KPI cards
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.markdown("""
-        <div class="metric-card">
+        <div class="metric-card highlight-gcn">
             <div class="metric-icon">📄</div>
-            <div class="metric-value">169,343</div>
+            <div class="metric-value" style="color: #38BDF8;">169,343</div>
             <div class="metric-label">Total Nodes (Papers)</div>
             <div class="metric-sub">Microsoft Academic Graph</div>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
-        <div class="metric-card">
+        <div class="metric-card highlight-gat">
             <div class="metric-icon">🔗</div>
-            <div class="metric-value">2,315,598</div>
+            <div class="metric-value" style="color: #C084FC;">2,315,598</div>
             <div class="metric-label">Directed Edges</div>
             <div class="metric-sub">Avg Degree: 13.67 links/node</div>
         </div>
@@ -174,7 +174,7 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
         st.markdown("""
         <div class="metric-card">
             <div class="metric-icon">🧬</div>
-            <div class="metric-value">128-dim</div>
+            <div class="metric-value" style="color: #34D399;">128-dim</div>
             <div class="metric-label">Feature Embeddings</div>
             <div class="metric-sub">Word2Vec Title+Abstract</div>
         </div>
@@ -183,19 +183,22 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
         st.markdown("""
         <div class="metric-card">
             <div class="metric-icon">🎯</div>
-            <div class="metric-value">40 Classes</div>
+            <div class="metric-value" style="color: #FB923C;">40 Classes</div>
             <div class="metric-label">arXiv CS Categories</div>
             <div class="metric-sub">Single-label Subject Class</div>
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
 
-    # Interactive Partitioning Donut Chart & Topology Summary
+    # Interactive Partitioning Donut Chart & Topology Summary in Liquid Glass
     col_left, col_right = st.columns([1.2, 1.8])
 
     with col_left:
-        st.markdown("#### 🕒 Chronological Temporal Splits")
+        st.markdown("""
+        <div class="glass-img-container">
+            <div style="font-weight: 700; font-size: 1.05rem; color: #F8FAFC; margin-bottom: 8px;">🕒 Chronological Temporal Splits</div>
+        """, unsafe_allow_html=True)
         split_data = pd.DataFrame({
             "Split": ["Train (≤ 2017)", "Validation (2018)", "Test (2019-2020)"],
             "Papers": [90941, 29799, 48603],
@@ -205,31 +208,35 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
             split_data,
             values="Papers",
             names="Split",
-            hole=0.55,
+            hole=0.58,
             color="Split",
             color_discrete_map={
                 "Train (≤ 2017)": "#38BDF8",
-                "Validation (2018)": "#F59E0B",
-                "Test (2019-2020)": "#10B981"
+                "Validation (2018)": "#FB923C",
+                "Test (2019-2020)": "#34D399"
             }
         )
         fig_donut.update_traces(
             textposition="outside",
             textinfo="percent+label",
-            marker=dict(line=dict(color="#0B0F19", width=2))
+            marker=dict(line=dict(color="rgba(11, 17, 32, 0.8)", width=2))
         )
         fig_donut.update_layout(
             showlegend=False,
-            margin=dict(l=20, r=20, t=20, b=20),
-            height=280,
+            margin=dict(l=15, r=15, t=15, b=15),
+            height=270,
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#E2E8F0")
         )
         st.plotly_chart(fig_donut, use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with col_right:
-        st.markdown("#### 📐 Topological Metrics Summary")
+        st.markdown("""
+        <div class="glass-img-container">
+            <div style="font-weight: 700; font-size: 1.05rem; color: #F8FAFC; margin-bottom: 8px;">📐 Topological Metrics Summary</div>
+        """, unsafe_allow_html=True)
         # Format stats nicely
         formatted_df = stats_df.copy()
         for col in formatted_df.columns:
@@ -241,15 +248,18 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
         st.dataframe(formatted_df, use_container_width=True, hide_index=True)
         
         st.markdown("""
-        <div style="background: rgba(30, 41, 59, 0.6); padding: 14px 18px; border-radius: 10px; border-left: 4px solid #38BDF8; margin-top: 10px;">
-            <span style="font-weight: 600; color: #38BDF8;">💡 Homophily Insight:</span>
-            <span style="color: #CBD5E1; font-size: 0.9rem;">
-                The ogbn-arxiv citation network exhibits strong domain homophily (85.7% local neighbor agreement), which enables isotropic Laplacian smoothing in GCNs to outperform complex attention kernels.
-            </span>
+        <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0.6) 100%); padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.3); border-top: 1px solid rgba(255, 255, 255, 0.25); margin-top: 10px; box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);">
+            <div style="font-weight: 700; color: #38BDF8; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+                <span>💡 Homophily Insight</span>
+            </div>
+            <div style="color: #CBD5E1; font-size: 0.84rem; margin-top: 3px; line-height: 1.45;">
+                The ogbn-arxiv network exhibits strong domain homophily (85.7% local neighbor agreement), which enables isotropic Laplacian smoothing in GCNs to outperform complex attention kernels.
+            </div>
+        </div>
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 22px;'></div>", unsafe_allow_html=True)
 
     # 3D Interactive Topology & Visual Artifacts
     st.markdown("#### 🔬 Network Visualizations & 3D Interactive Topology")
@@ -264,8 +274,8 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
 
     with tab_3d_graph:
         st.markdown("""
-        <div style="background: rgba(30, 41, 59, 0.6); padding: 12px 16px; border-radius: 10px; border-left: 4px solid #38BDF8; margin-bottom: 12px;">
-            <span style="font-weight: 700; color: #38BDF8;">🕹️ 3D Graph Scroll Controls:</span>
+        <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0.7) 100%); padding: 14px 18px; border-radius: 14px; border: 1px solid rgba(56, 189, 248, 0.3); border-top: 1px solid rgba(255, 255, 255, 0.25); margin-bottom: 14px; box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.4);">
+            <span style="font-weight: 800; color: #38BDF8;">🕹️ 3D Graph Scroll Controls:</span>
             <span style="color: #CBD5E1; font-size: 0.88rem;">
                 Use <b>Mouse Scroll Wheel</b> to zoom in/out in 3D space, <b>Click & Drag</b> to rotate 360°, and <b>Hover</b> on node spheres to inspect local paper citation degrees.
             </span>
@@ -273,7 +283,9 @@ def render_graph_stats(stats_df: pd.DataFrame, graph_analysis_dir: Path | None =
         """, unsafe_allow_html=True)
         fig_3d = render_3d_citation_graph(subgraph_3d_file)
         if fig_3d is not None:
+            st.markdown("<div class='glass-img-container'>", unsafe_allow_html=True)
             st.plotly_chart(fig_3d, use_container_width=True)
+            st.markdown("</div>", unsafe_allow_html=True)
         else:
             st.info("3D Subgraph data file not found.")
 

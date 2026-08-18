@@ -39,17 +39,17 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
         eval_dir = dashboard_dir.parent / "results" / "evaluation"
 
     st.markdown("""
-    <div style="margin-bottom: 20px;">
-        <h2 style="margin: 0; font-weight: 700; font-size: 1.6rem; color: #F8FAFC;">
+    <div style="margin-bottom: 22px;">
+        <h2 style="margin: 0; font-weight: 800; font-size: 1.7rem; color: #FFFFFF; letter-spacing: -0.02em;">
             🏆 Model Benchmark & Performance Comparison
         </h2>
-        <p style="color: #94A3B8; margin-top: 4px; font-size: 0.95rem;">
-            Comparative empirical evaluation on the 48,603 held-out test papers (2019–2020 chronological partition).
+        <p style="color: #94A3B8; margin-top: 5px; font-size: 0.98rem; line-height: 1.5;">
+            Comparative empirical evaluation on the 48,603 held-out test papers (2019–2020 chronological partition) under liquid glass analytics.
         </p>
     </div>
     """, unsafe_allow_html=True)
 
-    # Key Performance Highlight Cards
+    # Key Performance Highlight Cards with Liquid Glass Styling
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         st.markdown("""
@@ -57,12 +57,12 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
             <div class="metric-icon">🥇</div>
             <div class="metric-value" style="color: #38BDF8;">58.64%</div>
             <div class="metric-label">GCN Test Accuracy</div>
-            <div class="metric-sub" style="color: #10B981;">▲ +1.25% vs GAT</div>
+            <div class="metric-sub" style="color: #34D399; font-weight: 700;">▲ +1.25% vs GAT</div>
         </div>
         """, unsafe_allow_html=True)
     with c2:
         st.markdown("""
-        <div class="metric-card">
+        <div class="metric-card highlight-gat">
             <div class="metric-icon">🥈</div>
             <div class="metric-value" style="color: #C084FC;">57.39%</div>
             <div class="metric-label">GAT Test Accuracy</div>
@@ -73,7 +73,7 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
         st.markdown("""
         <div class="metric-card">
             <div class="metric-icon">⚡</div>
-            <div class="metric-value" style="color: #10B981;">3.25x</div>
+            <div class="metric-value" style="color: #34D399;">3.25x</div>
             <div class="metric-label">Speed Advantage (GCN)</div>
             <div class="metric-sub">2.4s/epoch vs 7.8s/epoch</div>
         </div>
@@ -82,19 +82,22 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
         st.markdown("""
         <div class="metric-card">
             <div class="metric-icon">🎯</div>
-            <div class="metric-value" style="color: #F59E0B;">53.89%</div>
+            <div class="metric-value" style="color: #FB923C;">53.89%</div>
             <div class="metric-label">GCN Weighted F1</div>
-            <div class="metric-sub">GAT: 52.20% (▲ +1.69%)</div>
+            <div class="metric-sub" style="color: #38BDF8;">GAT: 52.20% (▲ +1.69%)</div>
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
 
-    # Interactive Comparison Chart & Metric Breakdown
+    # Interactive Comparison Chart & Metric Breakdown in Liquid Glass Frames
     col_chart, col_radar = st.columns([1.6, 1.4])
 
     with col_chart:
-        st.markdown("#### 📊 Metric-by-Metric Empirical Comparison")
+        st.markdown("""
+        <div class="glass-img-container">
+            <div style="font-weight: 700; font-size: 1.05rem; color: #F8FAFC; margin-bottom: 8px;">📊 Metric-by-Metric Empirical Comparison</div>
+        """, unsafe_allow_html=True)
         
         # Prepare melted DataFrame for Plotly
         plot_df = pd.DataFrame([
@@ -115,27 +118,31 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
             color="Model",
             barmode="group",
             text="Score (%)",
-            color_discrete_map={"GCN": "#38BDF8", "GAT": "#A855F7"}
+            color_discrete_map={"GCN": "#38BDF8", "GAT": "#C084FC"}
         )
         fig_bar.update_traces(
             texttemplate="%{text:.2f}%",
             textposition="outside",
-            marker=dict(line=dict(width=1, color="#1E293B"))
+            marker=dict(line=dict(width=1, color="rgba(11, 17, 32, 0.8)"))
         )
         fig_bar.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#E2E8F0"),
-            yaxis=dict(range=[45, 65], title="Score (%)", gridcolor="rgba(255,255,255,0.08)"),
+            yaxis=dict(range=[45, 65], title="Score (%)", gridcolor="rgba(255,255,255,0.07)", zerolinecolor="rgba(255,255,255,0.1)"),
             xaxis=dict(title="", gridcolor="rgba(255,255,255,0.05)"),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            margin=dict(l=20, r=20, t=30, b=20),
+            margin=dict(l=20, r=20, t=10, b=20),
             height=320
         )
         st.plotly_chart(fig_bar, use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with col_radar:
-        st.markdown("#### 🕸️ Multidimensional Performance Radar")
+        st.markdown("""
+        <div class="glass-img-container">
+            <div style="font-weight: 700; font-size: 1.05rem; color: #F8FAFC; margin-bottom: 8px;">🕸️ Multidimensional Performance Radar</div>
+        """, unsafe_allow_html=True)
         categories = ["Accuracy", "Precision", "Recall", "F1-Score", "Epoch Efficiency"]
         
         fig_radar = go.Figure()
@@ -144,41 +151,46 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
             theta=categories,
             fill='toself',
             name='GCN (Spectral)',
-            line=dict(color='#38BDF8', width=2),
-            fillcolor='rgba(56, 189, 248, 0.2)'
+            line=dict(color='#38BDF8', width=2.5),
+            fillcolor='rgba(56, 189, 248, 0.22)'
         ))
         fig_radar.add_trace(go.Scatterpolar(
             r=[57.39, 54.14, 57.39, 52.20, 45.0],
             theta=categories,
             fill='toself',
             name='GAT (Attention)',
-            line=dict(color='#A855F7', width=2),
-            fillcolor='rgba(168, 85, 247, 0.2)'
+            line=dict(color='#C084FC', width=2.5),
+            fillcolor='rgba(192, 132, 252, 0.22)'
         ))
 
         fig_radar.update_layout(
             polar=dict(
-                radialaxis=dict(visible=True, range=[30, 100], gridcolor="rgba(255,255,255,0.1)", linecolor="rgba(255,255,255,0.1)"),
-                angularaxis=dict(gridcolor="rgba(255,255,255,0.1)", linecolor="rgba(255,255,255,0.1)")
+                radialaxis=dict(visible=True, range=[30, 100], gridcolor="rgba(255,255,255,0.09)", linecolor="rgba(255,255,255,0.09)"),
+                angularaxis=dict(gridcolor="rgba(255,255,255,0.09)", linecolor="rgba(255,255,255,0.09)")
             ),
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#E2E8F0"),
             legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="center", x=0.5),
-            margin=dict(l=30, r=30, t=30, b=20),
+            margin=dict(l=30, r=30, t=20, b=20),
             height=320
         )
         st.plotly_chart(fig_radar, use_container_width=True)
-
-    st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
-
-    # Detailed Table
-    st.markdown("#### 📋 Raw Metric Values")
-    st.dataframe(metrics_df, use_container_width=True, hide_index=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
 
-    # High-Res Confusion Matrices
+    # Detailed Table in Liquid Glass Frame
+    st.markdown("""
+    <div class="glass-img-container">
+        <div style="font-weight: 700; font-size: 1.05rem; color: #F8FAFC; margin-bottom: 8px;">📋 Comprehensive Metric Benchmark Table</div>
+    """, unsafe_allow_html=True)
+    st.dataframe(metrics_df, use_container_width=True, hide_index=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("<div style='height: 22px;'></div>", unsafe_allow_html=True)
+
+    # High-Res Confusion Matrices in Liquid Glass Viewports
     st.markdown("#### 🎯 40-Class Test Confusion Matrices")
     tab_cm_gcn, tab_cm_gat, tab_cm_comp = st.tabs(["🔹 GCN Matrix", "🔸 GAT Matrix", "📊 Side-by-Side Comparison"])
 
@@ -188,10 +200,16 @@ def render_model_metrics(metrics_df: pd.DataFrame, eval_dir: Path | None = None)
 
     with tab_cm_gcn:
         if cm_gcn and cm_gcn.exists():
+            st.markdown("<div class='glass-img-container'>", unsafe_allow_html=True)
             st.image(str(cm_gcn), caption="GCN Confusion Matrix across 40 arXiv Subject Categories", use_container_width=True)
+            st.markdown("</div>", unsafe_allow_html=True)
     with tab_cm_gat:
         if cm_gat and cm_gat.exists():
+            st.markdown("<div class='glass-img-container'>", unsafe_allow_html=True)
             st.image(str(cm_gat), caption="GAT Confusion Matrix across 40 arXiv Subject Categories", use_container_width=True)
+            st.markdown("</div>", unsafe_allow_html=True)
     with tab_cm_comp:
         if comp_plot and comp_plot.exists():
+            st.markdown("<div class='glass-img-container'>", unsafe_allow_html=True)
             st.image(str(comp_plot), caption="Full Comparative Bar Plot across All Metrics", use_container_width=True)
+            st.markdown("</div>", unsafe_allow_html=True)
