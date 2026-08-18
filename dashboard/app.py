@@ -397,46 +397,126 @@ st.markdown(f"""
     }}
 
     /* =========================================================
-       STREAMLIT TABS OVERHAUL (LIQUID FROSTED CAPSULE)
+       STREAMLIT TABS OVERHAUL (LIQUID FROSTED CAPSULES & HOVER)
        ========================================================= */
-    .stTabs [data-baseweb="tab-list"] {{
-        gap: 8px;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(15, 23, 42, 0.75) 100%) !important;
-        backdrop-filter: blur(20px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-        padding: 8px 10px;
+    /* Remove default Streamlit red/orange underline highlight and bottom borders */
+    div[data-baseweb="tab-highlight"],
+    [data-baseweb="tab-highlight"],
+    div[data-baseweb="tab-border"],
+    [data-baseweb="tab-border"],
+    [data-testid="stTabs"] div[data-baseweb="tab-highlight"],
+    [data-testid="stTabs"] div[data-baseweb="tab-border"],
+    .stTabs [data-baseweb="tab-highlight"],
+    .stTabs [data-baseweb="tab-border"] {{
+        display: none !important;
+        background: transparent !important;
+        height: 0 !important;
+        width: 0 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }}
+
+    /* Tab List Container Bar */
+    [data-testid="stTabs"] > div:first-child,
+    div[data-testid="stTabsNav"],
+    div[data-baseweb="tab-list"],
+    div[role="tablist"],
+    .stTabs [data-baseweb="tab-list"],
+    .stTabs div[role="tablist"] {{
+        gap: 10px !important;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(15, 23, 42, 0.8) 100%) !important;
+        backdrop-filter: blur(24px) saturate(190%) contrast(108%) !important;
+        -webkit-backdrop-filter: blur(24px) saturate(190%) contrast(108%) !important;
+        padding: 8px 10px !important;
         border-radius: 18px !important;
         border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.25) !important;
-        box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.28) !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
+        box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.55),
+                    0 0 20px -4px var(--aura-glow),
+                    inset 0 1px 1px 0 rgba(255, 255, 255, 0.3),
+                    inset 0 -8px 16px -8px rgba(0, 0, 0, 0.3) !important;
+        margin-bottom: 22px !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        border-bottom: none !important;
     }}
 
+    /* Individual Tab Buttons - Default / Inactive */
+    [data-testid="stTabs"] button,
+    button[data-testid="stTab"],
+    div[data-baseweb="tab-list"] button,
+    button[data-baseweb="tab"],
+    div[role="tablist"] button[role="tab"],
+    .stTabs button,
     .stTabs [data-baseweb="tab"] {{
-        height: 46px !important;
-        white-space: pre-wrap;
-        background-color: transparent !important;
-        border-radius: 12px !important;
-        color: #94A3B8 !important;
-        font-weight: 700 !important;
-        font-size: 0.94rem !important;
+        height: 44px !important;
         padding: 0 20px !important;
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-        border: 1px solid transparent !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.18) !important;
+        color: #94A3B8 !important;
+        font-family: 'Outfit', sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 0.93rem !important;
+        letter-spacing: -0.01em !important;
+        cursor: pointer !important;
+        transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        outline: none !important;
+        box-shadow: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: nowrap !important;
     }}
 
+    /* Tab Hover Effect - Smooth Lift, Specular Glow & Rounded Corners */
+    [data-testid="stTabs"] button:hover,
+    button[data-testid="stTab"]:hover,
+    div[data-baseweb="tab-list"] button:hover,
+    button[data-baseweb="tab"]:hover,
+    div[role="tablist"] button[role="tab"]:hover,
+    .stTabs button:hover,
     .stTabs [data-baseweb="tab"]:hover {{
         color: #FFFFFF !important;
-        background: rgba(255, 255, 255, 0.06) !important;
-        transform: translateY(-2px);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(56, 189, 248, 0.16) 100%) !important;
+        border-color: rgba(56, 189, 248, 0.45) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.45) !important;
+        transform: translateY(-3px) scale(1.025) !important;
+        box-shadow: 0 10px 22px -4px rgba(56, 189, 248, 0.3),
+                    inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
     }}
 
-    .stTabs [aria-selected="true"] {{
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 100%), var(--aura-glow) !important;
+    /* Tab Active / Selected State - Glowing Liquid Glass Pill */
+    [data-testid="stTabs"] button[aria-selected="true"],
+    button[data-testid="stTab"][aria-selected="true"],
+    div[data-baseweb="tab-list"] button[aria-selected="true"],
+    button[data-baseweb="tab"][aria-selected="true"],
+    div[role="tablist"] button[role="tab"][aria-selected="true"],
+    .stTabs button[aria-selected="true"],
+    .stTabs [data-baseweb="tab"][aria-selected="true"] {{
+        background: linear-gradient(135deg, rgba(56, 189, 248, 0.26) 0%, rgba(192, 132, 252, 0.20) 100%), rgba(15, 23, 42, 0.9) !important;
         color: #FFFFFF !important;
-        border: 1px solid var(--aura-primary) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.5) !important;
-        box-shadow: 0 8px 20px -4px var(--aura-glow), inset 0 1px 2px rgba(255, 255, 255, 0.4) !important;
-        transform: translateY(-2px);
+        font-weight: 800 !important;
+        border: 1px solid rgba(56, 189, 248, 0.55) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.6) !important;
+        box-shadow: 0 10px 25px -4px rgba(56, 189, 248, 0.35),
+                    0 0 16px -2px rgba(56, 189, 248, 0.25),
+                    inset 0 1px 2px rgba(255, 255, 255, 0.5) !important;
+        transform: translateY(-2px) !important;
+    }}
+
+    /* Text & Icon styling inside tabs */
+    [data-testid="stTabs"] button p,
+    button[data-baseweb="tab"] p,
+    div[role="tablist"] button p,
+    .stTabs [data-baseweb="tab"] p {{
+        font-size: 0.93rem !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
+        color: inherit !important;
     }}
 
     /* =========================================================
