@@ -1,19 +1,60 @@
+# ===== Python =====
 __pycache__/
 *.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+
+# ===== Virtual environments =====
+venv/
+.venv/
+env/
+
+# ===== Notebook/ =====
 .ipynb_checkpoints/
-.DS_Store
+Notebook/.ipynb_checkpoints/
+
+# ===== Secrets =====
 .env
-data/raw/ogbn_arxiv/
-data/processed/*.pt
+.streamlit/secrets.toml
+
+# ===== OS / editor =====
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ===== data/ =====
+data/raw/**
+data/processed/**
 !data/raw/.gitkeep
 !data/processed/.gitkeep
-!models/.gitkeep
-!results/**/.gitkeep
 
-# Exclude Reports & Coursework Deliverables
-report/
-presentation/
-video/
-Project_Proposal.md
-build_*_pdf.py
-tmp_*.py
+# ===== models/ =====
+models/*.pt
+models/*.pth
+models/*.pkl
+models/*.joblib
+!models/.gitkeep
+
+# ===== reports/ (generated outputs, not source) =====
+reports/*.pdf
+reports/*.html
+reports/figures/**
+!reports/figures/.gitkeep
+
+# ===== app/ and src/ (usually clean, but just in case) =====
+app/__pycache__/
+src/__pycache__/
+
+# ===== Logs / experiment tracking =====
+*.log
+wandb/
+mlruns/
+
+# ===== Misc caches =====
+.pytest_cache/
+.mypy_cache/
+.cache/
+ 
