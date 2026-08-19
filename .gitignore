@@ -51,3 +51,10 @@ video/
 Project_Proposal.md
 build_*_pdf.py
 tmp_*.py
+
+
+run_notebook.sbat
+run_notebooks.py
+streamlit_app.py
+generate_report.py
+LICENSE
