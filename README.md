@@ -145,58 +145,6 @@ Output compiled at: [`report/CCS4354_Technical_Report.pdf`](report/CCS4354_Techn
 
 ---
 
-## 📂 Repository Structure
-
-```text
-├── dashboard/                     # Interactive Streamlit Web Application
-│   ├── app.py                     # Main dashboard entrypoint & tab navigation
-│   ├── requirements.txt           # Dashboard-specific dependencies
-│   └── components/                # Modular UI visualization components
-│       ├── classification.py      # Real-time node search & agreement inspector
-│       ├── embeddings.py          # 2D PCA and t-SNE projection viewer
-│       ├── graph_stats.py         # Topological metric cards & degree plots
-│       └── model_metrics.py       # Metrics comparison table & confusion matrices
-├── data/                          # Dataset directory (raw downloads & processed tensors)
-│   ├── raw/                       # Automatic download directory for OGBN-Arxiv (~700 MB)
-│   └── processed/                 # Processed PyTorch tensors (.pt)
-├── models/                        # Saved model state checkpoints
-│   ├── best_gcn.pt                # Checkpoint weights for trained GCN
-│   └── best_gat.pt                # Checkpoint weights for trained GAT
-├── notebooks/                     # End-to-end sequential Jupyter notebooks
-│   ├── 01_tensor_fundamentals.ipynb
-│   ├── 02_graph_representation_analysis.ipynb
-│   ├── 03_data_preparation.ipynb
-│   ├── 04_gcn_model.ipynb
-│   ├── 05_gat_model.ipynb
-│   ├── 06_training_optimization.ipynb
-│   ├── 07_model_evaluation.ipynb
-│   └── 08_explainability_embeddings.ipynb
-├── report/                        # Technical report documentation
-│   ├── CCS4354_Technical_Report.md # Full 12-section Markdown report
-│   ├── CCS4354_Technical_Report.pdf # 4-page publication-grade compiled PDF
-│   └── README.md
-├── results/                       # Generated experimental figures & CSV metrics
-│   ├── evaluation/                # Metrics CSV, comparison bar plots, confusion matrices
-│   ├── explainability/            # PCA and t-SNE latent embedding plots
-│   ├── graph_analysis/            # Summary stats, degree distributions, subgraph figures
-│   └── training/                  # GCN/GAT training histories & hyperparameter trials
-├── src/                           # Core reusable Python source library
-│   ├── config.py                  # Project paths & directory configuration
-│   ├── data/                      # Data loaders, split utilities, preprocessing
-│   ├── evaluation/                # Classification metrics, evaluators, plotters
-│   ├── explainability/            # Embedding extractors, PCA/t-SNE reducers
-│   ├── graph/                     # Degree, density, component, and subgraph analysis
-│   ├── models/                    # GCN and GAT PyTorch Geometric architectures
-│   └── training/                  # Training loops, loss functions, hyperparameter grid
-├── build_full_report_pdf.py       # Script to compile publication-grade PDF report
-├── run_dashboard.py               # Convenience script to launch Streamlit dashboard
-├── tmp_build_report.py            # Report build trigger script
-├── requirements.txt               # Global Python package requirements
-└── README.md                      # Project documentation
-```
-
----
-
 ## 🔬 Mathematical Formulations
 
 ### Graph Convolutional Network (GCN)
