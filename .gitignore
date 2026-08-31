@@ -1,60 +1,90 @@
-# ===== Python =====
+# =========================
+# Python
+# =========================
 __pycache__/
 *.py[cod]
+*.pyo
 *.so
 build/
 dist/
 *.egg-info/
 
-# ===== Virtual environments =====
-venv/
+# Virtual environments
 .venv/
+venv/
 env/
+ENV/
 
-# ===== Notebook/ =====
+# =========================
+# Jupyter
+# =========================
 .ipynb_checkpoints/
-Notebook/.ipynb_checkpoints/
 
-# ===== Secrets =====
-.env
-.streamlit/secrets.toml
-
-# ===== OS / editor =====
-.DS_Store
-Thumbs.db
+# =========================
+# IDE / Editor
+# =========================
 .vscode/
 .idea/
 
-# ===== data/ =====
-data/raw/**
-data/processed/**
+# =========================
+# Environment & Secrets
+# =========================
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# =========================
+# Logs & Temporary Files
+# =========================
+*.log
+*.tmp
+*.temp
+*.bak
+
+# =========================
+# Data
+# =========================
+data/raw/*
+data/processed/*
+
+# Keep data folders in Git
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 
-# ===== models/ =====
-models/*.pt
-models/*.pth
-models/*.pkl
-models/*.joblib
+# =========================
+# Generated Results
+# =========================
+results/*
+!results/.gitkeep
+
+# =========================
+# Temporary Build Files
+# =========================
+tmp_*/
+temp_*/
+
+# =========================
+# ML Model Artifacts
+# =========================
+*.pkl
+*.pickle
+*.joblib
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.ckpt
 !models/.gitkeep
 
-# ===== reports/ (generated outputs, not source) =====
-reports/*.pdf
-reports/*.html
-reports/figures/**
-!reports/figures/.gitkeep
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
 
-# Exclude Reports & Coursework Deliverables
-report/
-presentation/
-video/
-Project_Proposal.md
-build_*_pdf.py
-tmp_*.py
-
-
-run_notebook.sbat
-run_notebooks.py
-streamlit_app.py
-generate_report.py
-LICENSE
+# =========================
+# Large Media
+# =========================
+video/*
+!video/.gitkeep
