@@ -1,23 +1,92 @@
+# =========================
+# Python
+# =========================
 __pycache__/
 *.py[cod]
+*.pyo
+*.so
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# =========================
+# Jupyter
+# =========================
 .ipynb_checkpoints/
-.DS_Store
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Environment & Secrets
+# =========================
 .env
-data/raw/ogbn_arxiv/
-data/processed/*.pt
-models/*.pt
-results/**/*.png
-results/**/*.csv
-results/**/*.txt
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# =========================
+# Logs & Temporary Files
+# =========================
+*.log
+*.tmp
+*.temp
+*.bak
+
+# =========================
+# Data
+# =========================
+data/raw/*
+data/processed/*
+
+# Keep data folders in Git
 !data/raw/.gitkeep
 !data/processed/.gitkeep
-!models/.gitkeep
-!results/**/.gitkeep
 
-# Exclude Reports & Coursework Deliverables
-report/
-presentation/
-video/
-Project_Proposal.md
-build_*_pdf.py
-tmp_*.py
+# =========================
+# Generated Results
+# =========================
+results/*
+!results/.gitkeep
+!results/dashboard/
+!results/dashboard/*
+
+# =========================
+# Temporary Build Files
+# =========================
+tmp_*/
+temp_*/
+
+# =========================
+# ML Model Artifacts
+# =========================
+*.pkl
+*.pickle
+*.joblib
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.ckpt
+!models/.gitkeep
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Large Media
+# =========================
+video/*
+!video/.gitkeep
