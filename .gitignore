@@ -57,6 +57,8 @@ data/processed/*
 # =========================
 results/*
 !results/.gitkeep
+!results/dashboard/
+!results/dashboard/*
 
 # =========================
 # Temporary Build Files
