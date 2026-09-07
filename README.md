@@ -132,19 +132,6 @@ Open [http://localhost:8501](http://localhost:8501) in your browser to access:
 
 ---
 
-### 4. Build the Full Technical Report PDF
-
-Generate the publication-grade PDF technical report with embedded figures and tables:
-
-```bash
-python tmp_build_report.py
-# or
-python build_full_report_pdf.py
-```
-Output compiled at: [`report/CCS4354_Technical_Report.pdf`](report/CCS4354_Technical_Report.pdf).
-
----
-
 ## 🔬 Mathematical Formulations
 
 ### Graph Convolutional Network (GCN)
